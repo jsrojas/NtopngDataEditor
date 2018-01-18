@@ -34,10 +34,10 @@ public class NtopngDataEditor {
 
         //This code loads the CSV file with the SourceIP, SourcePort, DestinationIP, DestinationPort and L7Protocol
         //Obtained from the database generated from ntopng
-        ntopngDataset = csvReader.CSVLabelsLoader("/home/juan/ntop/26-04-4-12pm-ntopng.csv");
+        ntopngDataset = csvReader.CSVLabelsLoader("/home/juan/ntop/ntopng csv files/26-04-4-12pm-ntopng.csv");
 
         //This code loads the CSV file that is going to be labeled
-        unlabeledDataset = csvReader.CSVUnlabeledLoader("/home/juan/ntop/26-04-4_12pm.csv");
+        unlabeledDataset = csvReader.CSVUnlabeledLoader("/home/juan/ntop/Unlabeled csv files/26-04-4_12pm.csv");
 
         //This code loads the CSV file that is going to be labeled
         protocolsSet = csvReader.CSVProtocolsLoader("/home/juan/ntop/Protocols-ndpi.csv");
@@ -53,85 +53,38 @@ public class NtopngDataEditor {
         }
         labeledDataset[0][85] = ntopngDataset.get(0).get(4);
         labeledDataset[0][86] = "ProtocolName";
-        
+
         //This loop performs the algorithm that enables the comparation and labeling process
         //The variables that are compared are: SourceIP, DestinationIP, SourcePort and DestinationPort
         for (int i = 1; i < unlabeledDataset.size(); i++) {
-            System.out.println("Flow Unlabeled: " + i);
-            label= false;
+            System.out.println("Current Unlabeled Flow: " + i);
+            label = false;
 
             for (int j = 1; j < ntopngDataset.size(); j++) {
 
                 //System.out.println("**********************Current ntop row: " + j + "*********************************");
-
                 //System.out.println("Revisando IP de origen");
-                if (unlabeledDataset.get(i).get(1).equals(ntopngDataset.get(j).get(0))) {
-                    //System.out.println("Source IP iguales......revisando IP de destino");
-                    //System.out.println("Ip unlabeled: " + unlabeledDataset.get(i).get(1) + " IP ntop: " + ntopngDataset.get(j).get(0));
-
-                    if (unlabeledDataset.get(i).get(3).equals(ntopngDataset.get(j).get(2))) {
-                        //System.out.println("Source y Destination IP iguales......revisando puertos de origen");
-                        //System.out.println("Dest Ip unlabeled: " + unlabeledDataset.get(i).get(3) + " Dest IP ntop: " + ntopngDataset.get(j).get(2));
-
-                        if (unlabeledDataset.get(i).get(2).equals(ntopngDataset.get(j).get(1))) {
-                            //System.out.println("IP's y Puertos de origen iguales.....Revisando puertos de destino");
-                            //System.out.println("source port unlabeled: " + unlabeledDataset.get(i).get(2) + " source port ntop: " + ntopngDataset.get(j).get(1));
-
-                            if (unlabeledDataset.get(i).get(4).equals(ntopngDataset.get(j).get(3))) {
-                                //System.out.println("Todos los datos son iguales.....etiquetando APP");
-                                labeledDataset[i][85] = ntopngDataset.get(j).get(4);
-                                int c = Integer.parseInt(ntopngDataset.get(j).get(4));
-                                labeledDataset[i][86] = protocolsSet.get(c).get(0);
-                                label = true;
-                                //System.out.println("*******************Código de Applicación etiquetada: " + labeledDataset[i][85] + "********************");
-                                break;
-                            } else {
-                                //System.out.println("***Flow not found - Puertos de destino diferentes***");
-                                //System.out.println("Unlabeled dest port: " + unlabeledDataset.get(i).get(4) + " ntop dest port: " + ntopngDataset.get(j).get(3));
-                                if (label == false && j == ntopngDataset.size()-1) {
-                                    //System.out.println("Flujo no encontrado en el dataset");
-                                    labeledDataset[i][85] = "0";
-                                    labeledDataset[i][86] = protocolsSet.get(0).get(0);
-                                    break;
-                                }
-                            }
-
-                        } else {
-                            //System.out.println("***Flow not found - Puertos de origen diferentes***");
-                            //System.out.println("source port unlabeled: " + unlabeledDataset.get(i).get(2) + " source port ntop: " + ntopngDataset.get(j).get(1));
-                            if (label == false && j == ntopngDataset.size()-1) {
-                                //System.out.println("Flujo no encontrado en el dataset");
-                                labeledDataset[i][85] = "0";
-                                labeledDataset[i][86] = protocolsSet.get(0).get(0);
-                                break;
-                            }
-                        }
-                    } else {
-                        //System.out.println("***Flow Not found - IP's de destino diferentes***");
-                        //System.out.println("Ip unlabeled: " + unlabeledDataset.get(i).get(3) + " IP ntop: " + ntopngDataset.get(j).get(2));
-                        if (label == false && j == ntopngDataset.size()-1) {
-                            //System.out.println("Flujo no encontrado en el dataset");
-                            labeledDataset[i][85] = "0";
-                            labeledDataset[i][86] = protocolsSet.get(0).get(0);
-                            break;
-                        }
-                    }
-                } else {
-                    //System.out.println("***Flow Not found - IP's de origen diferentes***");
-                    //System.out.println("source Ip unlabeled: " + unlabeledDataset.get(i).get(1) + " source IP ntop: " + ntopngDataset.get(j).get(0));
-                    //System.out.println("Fila del dataset ntop: "+j);
-                    if (label == false && j == ntopngDataset.size()-1) {
-                        //System.out.println("Flujo no encontrado en el dataset");
-                        labeledDataset[i][85] = "0";
-                        labeledDataset[i][86] = protocolsSet.get(0).get(0);
-                        break;
-                    }
+                if (unlabeledDataset.get(i).get(1).equals(ntopngDataset.get(j).get(0))
+                        && unlabeledDataset.get(i).get(3).equals(ntopngDataset.get(j).get(2))
+                        && unlabeledDataset.get(i).get(2).equals(ntopngDataset.get(j).get(1))
+                        && unlabeledDataset.get(i).get(4).equals(ntopngDataset.get(j).get(3))) {
+                    //System.out.println("Todos los datos son iguales.....etiquetando APP");
+                    labeledDataset[i][85] = ntopngDataset.get(j).get(4);
+                    int c = Integer.parseInt(ntopngDataset.get(j).get(4));
+                    labeledDataset[i][86] = protocolsSet.get(c).get(0);
+                    label = true;
+                    //System.out.println("*******************Código de Applicación etiquetada: " + labeledDataset[i][85] + "********************");
+                    break;
+                } else if (label == false && j == ntopngDataset.size() - 1) {
+                    //System.out.println("Flujo no encontrado en el dataset");
+                    labeledDataset[i][85] = "0";
+                    labeledDataset[i][86] = protocolsSet.get(0).get(0);
+                    break;
                 }
+                //System.out.println("************************************Pasando a siguiente flujo****************************************************************");
             }
-            System.out.println("*****************************************Pasando a siguiente flujo****************************************************************");
         }
         System.out.println("Proceso de etiquetado terminado");
-
         //Now the labeled dataset is created as a csv file
         csvCreator.csvCreator(labeledDataset);
     }
