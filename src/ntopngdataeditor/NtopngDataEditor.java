@@ -34,10 +34,10 @@ public class NtopngDataEditor {
 
         //This code loads the CSV file with the SourceIP, SourcePort, DestinationIP, DestinationPort and L7Protocol
         //Obtained from the database generated from ntopng
-        ntopngDataset = csvReader.CSVLabelsLoader("/home/juan/ntop/ntopng csv files/26-04-4-12pm-ntopng.csv");
+        ntopngDataset = csvReader.CSVLabelsLoader("/home/juan/ntop/ntopng csv files/26-04/26-04-4-12pm-ntopng.csv");
 
         //This code loads the CSV file that is going to be labeled
-        unlabeledDataset = csvReader.CSVUnlabeledLoader("/home/juan/ntop/Unlabeled csv files/26-04-4_12pm.csv");
+        unlabeledDataset = csvReader.CSVUnlabeledLoader("/home/juan/ntop/Unlabeled csv files/26-04/26-04-4_12pm.csv");
 
         //This code loads the CSV file that is going to be labeled
         protocolsSet = csvReader.CSVProtocolsLoader("/home/juan/ntop/Protocols-ndpi.csv");
@@ -77,8 +77,8 @@ public class NtopngDataEditor {
                     break;
                 } else if (label == false && j == ntopngDataset.size() - 1) {
                     //System.out.println("Flujo no encontrado en el dataset");
-                    labeledDataset[i][85] = "0";
-                    labeledDataset[i][86] = protocolsSet.get(0).get(0);
+                    labeledDataset[i][85] = "226";
+                    labeledDataset[i][86] = "FLOW_NOT_FOUND";
                     break;
                 }
                 //System.out.println("************************************Pasando a siguiente flujo****************************************************************");
